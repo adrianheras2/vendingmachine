@@ -21,6 +21,8 @@
         "symfony/yaml": "5.1.*"
     },
     "require-dev": {
+        "squizlabs/php_codesniffer": "*",
+        "guzzlehttp/guzzle": "*"
     },
     "config": {
         "optimize-autoloader": true,
@@ -32,7 +34,8 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "Domain\\": "domain/"
+            "Domain\\": "domain/",
+            "InterfaceAdapters\\": "interfaceAdapters/"
         }
     },
     "autoload-dev": {
@@ -59,7 +62,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "tests": "docker-compose exec -T miservicio_php bin/phpunit"
     },
     "conflict": {
         "symfony/symfony": "*"

@@ -29,25 +29,3 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-
-    # Autowired and Dependency Injection resolution section
-
-    Domain\Service\ProductService: '@domain.service.product'
-    domain.service.product:
-        class: Domain\Service\ProductService
-        # public: true
-        arguments:
-            - '@app.repository.product'
-    app.repository.product:
-        class: App\Repository\ProductRepository
-
-    #Domain\Service\PersonService: '@domain.service.person'
-    #
-    #domain.service.person:
-    #    class: Domain\Service\PersonService
-    #    #public: true
-    #    arguments:
-    #        - '@app.repository.person'
-    #        -
-    #app.repository.person:
-    #    class: App\Repository\PersonRepository

@@ -44,11 +44,7 @@ class GetProductVendingMachineAction extends AbstractVendingMachineAction
 
         // Checking & getting the asked product exists
         $product = $this->vendingMachine->getAvailableProductByName($productName);
-        if ($product === null){
-            throw new NotFoundHttpException("The product does not exist");
-        }
-
-        if ($product->getCount() === 0) {
+        if (($product === null) || ($product->getCount() === 0)) {
             $result[] = 'NO-PRODUCT-AVAILABLE';
             $this->vendingMachine->setResult($result);
             return $this->vendingMachine;
@@ -126,7 +122,7 @@ class GetProductVendingMachineAction extends AbstractVendingMachineAction
 
         if ($amount > 0){
             // This can happen because the available return coins are not the same as the availabe insert coins
-            throw new NotFoundHttpException("There is not available money");
+            $result[] = 'NO-MORE-AVAILABLE-MONEY';
         }
 
         return $result;

@@ -1,49 +1,23 @@
 <?php
 
-namespace App\Entity;
+namespace Domain\Entity;
 
-use App\Repository\ProductRepository;
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ORM\Entity(repositoryClass=ProductRepository::class)
- */
 class Product
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $name;
-
-    /**
-     * @ORM\Column(type="float")
-     */
     private $price;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=VendingMachine::class, inversedBy="availableProducts")
-     */
     private $vendingMachine;
+    private $count;
 
     public function __toString()
     {
-        // TODO: Implement __toString() method.
         $product = [
           'name' => $this->getName(),
           'price' => $this->getPrice(),
         ];
         return json_encode($product);
     }
-
-
-
 
     public function getId(): ?int
     {
@@ -85,4 +59,22 @@ class Product
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    /**
+     * @param mixed $count
+     */
+    public function setCount($count): void
+    {
+        $this->count = $count;
+    }
+
+
 }

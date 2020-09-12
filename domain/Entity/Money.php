@@ -1,31 +1,18 @@
 <?php
 
-namespace App\Entity;
+namespace Domain\Entity;
 
-use App\Repository\MoneyRepository;
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ORM\Entity(repositoryClass=MoneyRepository::class)
- */
 class Money
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
     private $id;
-
-    /**
-     * @ORM\Column(type="float")
-     */
     private $amount;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=VendingMachine::class)
-     */
     private $vendingMachine;
+    private $count;
+
+    public function __toString()
+    {
+        return  number_format($this->amount, 2, '.', '');
+    }
 
     public function getId(): ?int
     {
@@ -55,4 +42,22 @@ class Money
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    /**
+     * @param mixed $count
+     */
+    public function setCount($count): void
+    {
+        $this->count = $count;
+    }
+
+
 }

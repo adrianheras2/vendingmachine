@@ -2,70 +2,38 @@
 
 namespace App\Controller;
 
-use App\Entity\VendingMachine;
-use App\Entity\Money;
-use App\Entity\Product;
-use Domain\Service\ProductService;
+use Domain\Entity\Product;
+use Domain\Entity\VendingMachine;
+use InterfaceAdapters\Adapter\ApiAdapter;
+use InterfaceAdapters\Presenter\ConsolePresenter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class VendingMachineController extends AbstractController
 {
-
-    private $productService;
-
-    public function __construct(ProductService $productservice)
-    {
-        $this->productService = $productservice;
-    }
-
     /**
-     * @Route("/api/product/{productName}/buy/{actions}", name="vending_machine")
+     * @Route("/api/vendingmachine/actions/{actions}", name="buy_product_vending_machine")
      */
-    public function buyProductAction(string $productName, string $actions)
+    public function vendingMachineActions(string $actions)
     {
-        $product = $this->productService->searchByName($productName);
 
-        // TODO
-        $product = [
-            'name' => $product->getName(),
-            'price' => $product->getPrice()
-        ];
-
-
-        $result = '';
         $vendingMachine = new VendingMachine();
-        $aActions = explode(',', $actions);
-        foreach($aActions as $action) {
-            // if is a number
-            if (is_numeric($action)) {
-                $money = new Money();
-                $money->setAmount(floatval($action));
-                $vendingMachine->addInsertedMoney($money);
-            } else if ($action === 'RETURN-COIN'){
-                foreach ($vendingMachine->getInsertedMoney() as $insertedMoney){
-                    $vendingMachine->removeInsertedMoney($insertedMoney);
-                    $result .= $insertedMoney->getAmount() . ', ';
-                }
-                $result .= 'RETURN-COIN, ';
-            } else {
-                //TODO: if formato GET-ALGO
-                $lala = explode('-', $action);
-                $productName = $lala[1];
 
-                // TODO: COMPROBAR QUE HAYA EL PRODUCTO
+        $adapter = new ApiAdapter();
+        $presenter = new ConsolePresenter();
+        $aActions = $adapter->adaptActions($actions);
 
-                // TODO: comprobar que hay dinero
-
-                // TODO: si sí:
-                $result .= $productName . ', ';
-
-                // TODO: si sobra: devolver pasta
+        try {
+            foreach($aActions as $action) {
+                $vendingMachine = $vendingMachine->doAction($action, $vendingMachine);
             }
+        } catch (\Exception $e) {
+            return $presenter->presentError($e->getMessage());
         }
 
-        return $this->json([
-            'result' => $result
-        ]);
+        return $presenter->presentResult($vendingMachine->getResult());
     }
 }

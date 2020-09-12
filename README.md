@@ -1,12 +1,13 @@
 ## Installation
 
+Requirements: 
+- docker, docker-compose installed
+- check the port 8181 is not being used
+
 The installation is very simle, only execute at project root:
 
     docker-compose up -d
-    
-The respective service serves thought 80 port but is mapped to 8181 port in the host machine, in the way to not use
-one common port as 80 that maybe other process is using it (only take care other process in host machine is not using the 8181 port)    
-
+      
 This will build a docker image according the:
 - docker-compose.yaml
 - php7-apache.dockerfile
@@ -15,6 +16,9 @@ This will build a docker image according the:
 It will make an Docker image with:
 - Apache 2 server
 - PHP 7.4 and required extensions
+
+The respective service serves thought 80 port but is mapped to 8181 port in the host machine, in the way to not use
+one common port as 80 that maybe other process is using it (only take care other process in host machine is not using the 8181 port)
 
 The project sources are mapped to host
 

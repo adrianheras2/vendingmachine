@@ -39,6 +39,14 @@ Note: There is not a composer script for this because they can not be interactiv
 
 you can also add products to the vending mahcine: http://localhost:8181/api/product/add/SODA/price/1.1
 
+# API Access
+
+Endpoint:
+    api/vendingmachine/actions/<ACTIONS LIST SEPARATED BY COMMAS>
+
+i.e.:
+    http://localhost:8181/api/vendingmachine/actions/SERVICE-0.25-20, SERVICE-0.10-12, SERVICE-SODA-6, SERVICE-WATER-12, SERVICE-JUICE-7, 1, 0.25, 0.25, GET-SODA
+
 ## Scripts
 
 ./vendingmachine.sh: execute the vending machine interative CLI
@@ -80,6 +88,8 @@ We have 3 entities:
 # Implementation:
 
 I've suposed an API microservices oriented architecture, for this I consume the business logic through API instead by services
+
+I've used the Symfony 5 framework
 
 The project architecture is based the Clean Architecture, proposed by Robert Martin.
 

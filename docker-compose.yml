@@ -1,70 +1,21 @@
-version: "3"  # la versión de Docker
+version: "3"
 
 services:
-
-  miservicio_mysql:
-    image: mysql:5.7  #usamos la imagen de docker hub
-    environment:
-      - MYSQL_DATABASE=vendingmachine
-      - MYSQL_ROOT_PASSWORD=Jadriar
-      - MYSQL_USER=adri
-      - MYSQL_PASSWORD=Jadriar
-    volumes:
-      # Montamos un volumen para MySQL para no perder los datos de bd
-      - ./volumenes/mysql:/var/lib/mysql    
-    expose:
-      - 3306
-    ports:
-      # para acceder desde nuestro SO al servicio MySQL fácilmente
-      # mapping porsts HOST:CONTAINER !!!!
-      # - 3306:3306
-      - 3307:3306
-    restart: always
-
   miservicio_php:
-#    image: php:7-apache
     build:
       context: .
       dockerfile: php7-apache.dockerfile
     volumes:
-      # Montamos nuestra web desde fuera en el directorio web del contenedor
-      # En mirepolocal es donde iré editando los código fuente, ...
       - .:/var/www/vendingmachine
-#      - /var/www/vendingmachine/vendor
       - ./envconfig/sites-available:/etc/apache2/sites-available
       - ./envconfig/sites-enabled:/etc/apache2/sites-enabled
-#    working_dir: /var/www/vendingmachine
     expose:
       - 80
     ports:
       - 8181:80
-      # - 80:8
     extra_hosts:
       # añadimos nuevas líneas al /etc/hosts (análogo al paŕametro docker --add-host):
       - "vendingmachine.local:127.0.0.1"
       - "vendingmachine.local:::1"
-#    entrypoint: ./wait-for-it.sh miservicio_mysql:3307
-#    command: ./wait-for-file.sh /var/www/vendingmachine/composer.json
-#    command: ["/wait-for-file.sh", "var/www/vendingmachine/composer.json", "--", [entrypoint function]]
 
-    links:
-      - miservicio_mysql
     restart: always
-#    environment:
-#      - APP_KEY=SomeRandomStringToAddSecurity123
-#      - APP_ENV=development
-#      - APP_DEBUG=true
-#      - APACHE_RUN_USER=apache-www-volume
-#      - APACHE_RUN_GROUP=apache-www-volume
-#      - UNSPLASH_ACCESS_KEY=${UNSPLASH_ACCESS_KEY}
-#      - UNSPLASH_SECRET_KEY=${UNSPLASH_SECRET_KEY}
-
-#  miservicio_composer:
-#    image: composer:latest
-#    volumes:
-#      - .:/var/www/vendingmachine
-#    working_dir: /var/www/vendingmachine
-#    command: install
-#    depends_on:
-#      - miservicio_php
-#    restart: 'no'

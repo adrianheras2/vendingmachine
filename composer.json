@@ -6,8 +6,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "^1.11",
-        "doctrine/doctrine-bundle": "^2.1",
-        "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
         "symfony/browser-kit": "5.1.*",
         "symfony/console": "5.1.*",
@@ -18,11 +16,11 @@
         "symfony/framework-bundle": "5.1.*",
         "symfony/maker-bundle": "^1.21",
         "symfony/phpunit-bridge": "^5.1",
-        "symfony/yaml": "5.1.*"
+        "symfony/yaml": "5.1.*",
+        "guzzlehttp/guzzle": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "*",
-        "guzzlehttp/guzzle": "*"
+        "squizlabs/php_codesniffer": "*"
     },
     "config": {
         "optimize-autoloader": true,
@@ -63,7 +61,10 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "tests": "docker-compose exec -T miservicio_php bin/phpunit"
+        "tests": "docker-compose exec -T miservicio_php bin/phpunit",
+        "cache:clear:prod": "docker-compose exec T miservicio_php php bin/console cache:clear --env=prod",
+        "cache:clear": "docker-compose exec -T miservicio_php php bin/console cache:clear --env=dev",
+        "vendingmachine": "docker-compose exec miservicio_php bin/console vendingmachine"
     },
     "conflict": {
         "symfony/symfony": "*"
